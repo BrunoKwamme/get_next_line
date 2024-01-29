@@ -21,26 +21,13 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE (1)
 # endif
-typedef struct linked_list
-{
-	char			*buffer;
-	struct linked_list	*next;
-}	gnl_list;
 
-typedef struct linked_list_manager
-{
-	int				fd;
-	gnl_list			fd_list;
-	struct linked_list_manager	*next;
-}	ll_manager;
-
-char			*ft_strchr(const char *s, int c);
-char			*ft_lstnl(gnl_list *lst, char *line, int rest_index);
-char			*ft_strdup(const char *s);
-void		ft_lstadd_back(gnl_list **lst, gnl_list *new);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s);
+size_t		ft_strlcat(char *dst, const char *src, size_t size);
 size_t		ft_strlen(const char *str);
-gnl_list	*ft_lstnew(void *content);
-gnl_list	*ft_lstlast(gnl_list *lst);
+size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 
 
 #endif

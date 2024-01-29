@@ -12,38 +12,33 @@
 
 #include "get_next_line.h"
 
-static size_t	search_line(char *rest, char *line, char *buffer, int fd)
+static char	*search_line(char *line, char *buffer, int fd)
 {
-	int	i;
-	int	li;
 
-	li = ft_strlen(line);
-	i = 0;
-	read(fd, buffer, BUFFER_SIZE);
-	while (buffer[i] != '\0' || )
+}
+
+static char	*get_line(char *line, char *buffer, int fd)
+{
+	read(fd, buffer, BUFFER_SIZE)
+	while ()
 	{
-		line[li] = buffer[i];
-		if (buffer[i] == '\n')
-			rest = ft_strchr(buffer, '\n');
-		i++;
+
 	}
+
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	buffer[BUFFER_SIZE];
 	char		*line;
-	char		buffer[BUFFER_SIZE + 1];
+	char		buffer[BUFFER_SIZE];
 	int	i;
-	int	li;
 
 	if (!fd)
 		return (NULL);
-	li = 0;
-	line = (char *) malloc (sizeof(char) * BUFFER_SIZE + 1);
-	if (!line)
-		return (NULL);
-	while (search_line(rest, line, buffer, fd) != 0)
+	if (buffer)
+		line = ft_strlcpy(line, rest, ft_strlen(rest));
+	while (!)
 	{
 
 		i = 0;
@@ -52,7 +47,6 @@ char	*get_next_line(int fd)
 			read(fd, buffer, BUFFER_SIZE);
 			if (buffer[i] != '\n' && buffer[i] != '\0')
 				line[li] = buffer[i];
-		li++;
 		i++;
 		}
 	}
@@ -61,6 +55,15 @@ char	*get_next_line(int fd)
 int main()
 {
 	int fd = open("blabla", O_RDONLY);
-	get_next_line(fd);
+	char	*str;
+	str = get_next_line(fd);
+	while (str != NULL)
+	{
+		printf("%s", str);
+		free(str);
+		str = get_next_line(fd);
+	}
+	printf("%s", str);
+	free(str);
 	return 0;
 }

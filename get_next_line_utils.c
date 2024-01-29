@@ -12,68 +12,20 @@
 
 #include "get_next_line.h"
 
-void	ft_lstadd_back(gnl_list **lst, gnl_list *new)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	gnl_list	*node;
+	size_t	i;
 
-	if (lst != NULL)
+	i = 0;
+	if (size == 0)
+		return (ft_strlen(src));
+	while (i < (size - 1) && src[i] != '\0')
 	{
-		if (*lst == NULL)
-			*lst = new;
-		else
-		{
-			node = ft_lstlast(*lst);
-			node->next = new;
-		}
+		dst[i] = src[i];
+		i++;
 	}
-}
-
-gnl_list	*ft_lstnew(void *content)
-{
-	gnl_list	*new;
-
-	new = malloc (sizeof(gnl_list));
-	if (!new)
-		return (NULL);
-	new->buffer = content;
-	new->next = NULL;
-	return (new);
-}
-
-gnl_list	*ft_lstlast(gnl_list *lst)
-{
-	if (lst == NULL)
-		return (NULL);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
-}
-
-gnl_list	ft_lstfd(int fd, ll_manager llm)
-{
-	if (!llm)
-		return (NULL);
-	while (llm && llm->fd != fd)
-		llm = llm->next;
-	return (llm->fd_list);
-}
-
-char	*ft_lstnl(gnl_list *lst, char *line, int rest_index)
-{
-	int	i;
-	int	lsti;
-
-	i = rest_index;
-	while (lst)
-	{
-		lsti = 0;
-		if (lst->buffer[lsti] != '\n' && lst->buffer[lsti] != '\0')
-		{
-			line[i] = lst->buffer[lsti];
-		}
-	}
-	line[i] = '\0';
-	return (line);
+	dst[i] = '\0';
+	return (ft_strlen(src));
 }
 
 size_t	ft_strlen(const char *str)
@@ -84,4 +36,38 @@ size_t	ft_strlen(const char *str)
 	while (str[i] != '\0')
 		i++;
 	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str;
+	int		length;
+
+	if (!s1 || !s2)
+		return (NULL);
+	length = (int) ft_strlen(s1) + (int) ft_strlen(s2) + 1;
+	str = malloc (sizeof(char) * (length));
+	if (!str)
+		return (NULL);;
+	ft_strlcpy(str, s1, length);
+	ft_strlcat(str, s2, length);
+	return (str);
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	dst_len;
+
+	dst_len = ft_strlen(dst);
+	i = 0;
+	if (dst_len >= size)
+		return (size + ft_strlen(src));
+	while ((dst_len + i) < (size - 1) && src[i] != '\0')
+	{
+		dst[dst_len + i] = src[i];
+		i++;
+	}
+	dst[dst_len + i] = '\0';
+	return (dst_len + ft_strlen(src));
 }
