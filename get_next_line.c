@@ -6,50 +6,73 @@
 /*   By: bkwamme <bkwamme@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:05:24 by bkwamme           #+#    #+#             */
-/*   Updated: 2023/12/07 16:31:04 by bkwamme          ###   ########.fr       */
+/*   Updated: 2024/01/31 15:21:48 by bkwamme          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*search_line(char *line, char *buffer, int fd)
+void	ft_bzero(void *s, size_t n)
 {
+	size_t	i;
+	char	*str;
 
+	str = (char *) s;
+	i = 0;
+	while (i < n)
+	{
+		str[i] = '\0';
+		i++;
+	}
 }
 
-static char	*get_line(char *line, char *buffer, int fd)
+static char	*search_line(char *line, char *buffer)
 {
-	read(fd, buffer, BUFFER_SIZE)
-	while ()
+	int	i;
+
+	i = 0;
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\0')
+		return (ft_strjoin(line, buffer));
+}
+
+static char	*get_line(int fd)
+{
+	static char	*buffer;
+	char	*line;
+	int		i;
+	int		x;
+
+	buffer = (char *) malloc((1 + BUFFER_SIZE) * sizeof(char));
+	if(!buffer)
+		return(NULL);
+	if(buffer)
 	{
-
+		search_line(line, buffer);
 	}
-
+	read(fd, buffer, BUFFER_SIZE);
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+		i++;
+	ft_strjoin(line, buffer);
+	if (buffer[i] == '\n')
+	{
+		i = 0;
+		while (buffer[i] != '\n')
+		{
+			line[x] = buffer[i];
+			x++;
+			i++;
+		}
+		ft_strchr(buffer, '\n');
+	}
 }
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE];
-	char		*line;
-	char		buffer[BUFFER_SIZE];
-	int	i;
-
-	if (!fd)
+	if (fd < 0 && BUFFER_SIZE <= 0)
 		return (NULL);
-	if (buffer)
-		line = ft_strlcpy(line, rest, ft_strlen(rest));
-	while (!)
-	{
-
-		i = 0;
-		while (rest[i] != '\n' && rest[i] != '\0')
-		{
-			read(fd, buffer, BUFFER_SIZE);
-			if (buffer[i] != '\n' && buffer[i] != '\0')
-				line[li] = buffer[i];
-		i++;
-		}
-	}
+	return (get_line(fd));
 }
 
 int main()
