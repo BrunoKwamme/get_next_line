@@ -6,7 +6,7 @@
 /*   By: bkwamme <bkwamme@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:07:33 by bkwamme           #+#    #+#             */
-/*   Updated: 2024/01/31 15:32:01 by bkwamme          ###   ########.fr       */
+/*   Updated: 2024/02/01 18:52:33 by bkwamme          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ size_t	ft_strlen(const char *str)
 	size_t	i;
 
 	i = 0;
-	while (str[i] != '\0')
-		i++;
+	if (str)
+		while (str[i] != '\0')
+			i++;
 	return (i);
 }
 
@@ -64,16 +65,19 @@ char	*ft_strchr(const char *s, int c)
 	while (s[i] != c && s[i] != '\0')
 		i++;
 	if (s[i] == c)
-		return ((char *)&s[i]);
+		return ((char *)&s[i + 1]);
 	return (NULL);
 }
-
-char	*ft_strjoin(char const *s1, char const *s2)
+/*
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
 	int		length;
 
-	length = (int) ft_strlen(s1) + (int) ft_strlen(s2) + 1;
+	if (!s1)
+		length = (int) ft_strlen(s2) + 1;
+	else
+		length = (int) ft_strlen(s1) + (int) ft_strlen(s2) + 1;
 	str = malloc (sizeof(char) * (length));
 	if (!str)
 		return (NULL);
@@ -83,5 +87,34 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		free(s1);
 	}
 	ft_strlcat(str, s2, length);
+	return (str);
+}*/
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*str;
+	int		i;
+
+	i = 0;
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	if (s1)
+	{
+		while (s1[i])
+		{
+			str[i] = s1[i];
+			i++;
+		}
+		free(s1);
+	}
+	while (*s2)
+		str[i++] = *s2++;
+	str[i] = '\0';
+	if (!*str)
+	{
+		free(str);
+		return (NULL);
+	}
 	return (str);
 }

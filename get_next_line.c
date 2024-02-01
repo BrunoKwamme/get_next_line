@@ -6,87 +6,122 @@
 /*   By: bkwamme <bkwamme@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:05:24 by bkwamme           #+#    #+#             */
-/*   Updated: 2024/01/31 15:21:48 by bkwamme          ###   ########.fr       */
+/*   Updated: 2024/02/01 20:43:33 by bkwamme          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
+static char *get_rest(char *line)
 {
-	size_t	i;
-	char	*str;
+	int		i;
+	int		x;
+	int		length;
+	char	*rest;
 
-	str = (char *) s;
+	if (!line)
+		return (0);
+	length = ft_strlen(line);
+	x = 0;
 	i = 0;
-	while (i < n)
+	while (line[i] != '\0' && line[i] != '\n')
+	i++;
+	if (line[i] == '\n')
+	i++;
+	rest = malloc(sizeof(char) * (length - i + 1));
+	if (!rest)
+		return (NULL);
+	while (line[i] != '\0')
 	{
-		str[i] = '\0';
+		rest[x] = line[i];
+		x++;
 		i++;
 	}
+	rest[x] = '\0';
+	free(line);
+	return (rest);
 }
 
-static char	*search_line(char *line, char *buffer)
-{
-	int	i;
 
-	i = 0;
-	while (buffer[i] != '\0' && buffer[i] != '\n')
-		i++;
-	if (buffer[i] == '\0')
-		return (ft_strjoin(line, buffer));
-}
-
-static char	*get_line(int fd)
+static char	*get_line(char *line)
 {
-	static char	*buffer;
-	char	*line;
+	char	*str;
 	int		i;
 	int		x;
 
-	buffer = (char *) malloc((1 + BUFFER_SIZE) * sizeof(char));
+	x = 0;
+	i = 0;
+	if (!line)
+		return (0);
+	while (line[i] != '\0' && line[i] != '\n')
+	i++;
+	if (line[i] == '\n')
+	i++;
+	str =  malloc(sizeof(char) * (i + 2));
+	if (!str)
+		return (NULL);
+	while (x <= i)
+	{
+		str[x] = line[x];
+		x++;
+	}
+	str[x] = '\0';
+	return (str);
+}
+
+
+
+static char	*search_line(int fd)
+{
+	char	*buffer;
+	char	*line;
+	static char	*rest;
+	int		end;
+
+	end = 1;
+	buffer = malloc(sizeof(char) * (1 + BUFFER_SIZE));
 	if(!buffer)
 		return(NULL);
-	if(buffer)
+	while (end > 0 && (!rest || !ft_strchr(rest, '\n')))
 	{
-		search_line(line, buffer);
-	}
-	read(fd, buffer, BUFFER_SIZE);
-	while (buffer[i] != '\0' && buffer[i] != '\n')
-		i++;
-	ft_strjoin(line, buffer);
-	if (buffer[i] == '\n')
-	{
-		i = 0;
-		while (buffer[i] != '\n')
+
+		end = read(fd, buffer, BUFFER_SIZE);
+		if (end == -1)
 		{
-			line[x] = buffer[i];
-			x++;
-			i++;
+			free(buffer);
+			return (NULL);
 		}
-		ft_strchr(buffer, '\n');
+		buffer[end] = '\0';
+		rest = ft_strjoin(rest, buffer);
 	}
+	free(buffer);
+	line = get_line(rest);
+	rest = get_rest(rest);
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	if (fd < 0 && BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	return (get_line(fd));
+	return (search_line(fd));
 }
 
 int main()
 {
 	int fd = open("blabla", O_RDONLY);
-	char	*str;
-	str = get_next_line(fd);
-	while (str != NULL)
+	char *s;
+
+	s = get_next_line(fd);
+	while(s)
 	{
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
+		printf("%s", s);
+		free(s);
+		s = get_next_line(fd);
+	
 	}
-	printf("%s", str);
-	free(str);
+		printf("%s", s);
+		free(s);
+
 	return 0;
 }
