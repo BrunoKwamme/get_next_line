@@ -6,7 +6,7 @@
 /*   By: bkwamme <bkwamme@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:05:24 by bkwamme           #+#    #+#             */
-/*   Updated: 2024/02/01 20:43:33 by bkwamme          ###   ########.fr       */
+/*   Updated: 2024/02/04 13:24:22 by bkwamme          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static char *get_rest(char *line)
 	return (rest);
 }
 
-
 static char	*get_line(char *line)
 {
 	char	*str;
@@ -57,10 +56,10 @@ static char	*get_line(char *line)
 	i++;
 	if (line[i] == '\n')
 	i++;
-	str =  malloc(sizeof(char) * (i + 2));
+	str =  malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (NULL);
-	while (x <= i)
+	while (x < i)
 	{
 		str[x] = line[x];
 		x++;
@@ -118,7 +117,7 @@ int main()
 		printf("%s", s);
 		free(s);
 		s = get_next_line(fd);
-	
+
 	}
 		printf("%s", s);
 		free(s);
