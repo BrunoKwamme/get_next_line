@@ -6,13 +6,29 @@
 /*   By: bkwamme <bkwamme@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:05:24 by bkwamme           #+#    #+#             */
-/*   Updated: 2024/02/04 13:24:22 by bkwamme          ###   ########.fr       */
+/*   Updated: 2024/02/05 10:06:39 by bkwamme          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char *get_rest(char *line)
+static char	*put_rest(char *line, char *rest, int i)
+{
+	int	x;
+
+	x = 0;
+	while (line[i] != '\0')
+	{
+		rest[x] = line[i];
+		x++;
+		i++;
+	}
+	rest[x] = '\0';
+	free(line);
+	return (rest);
+}
+
+static char	*get_rest(char *line)
 {
 	int		i;
 	int		x;
@@ -25,21 +41,13 @@ static char *get_rest(char *line)
 	x = 0;
 	i = 0;
 	while (line[i] != '\0' && line[i] != '\n')
-	i++;
+		i++;
 	if (line[i] == '\n')
-	i++;
+		i++;
 	rest = malloc(sizeof(char) * (length - i + 1));
 	if (!rest)
 		return (NULL);
-	while (line[i] != '\0')
-	{
-		rest[x] = line[i];
-		x++;
-		i++;
-	}
-	rest[x] = '\0';
-	free(line);
-	return (rest);
+	return (put_rest(line, rest, i));
 }
 
 static char	*get_line(char *line)
@@ -53,10 +61,10 @@ static char	*get_line(char *line)
 	if (!line)
 		return (0);
 	while (line[i] != '\0' && line[i] != '\n')
-	i++;
+		i++;
 	if (line[i] == '\n')
-	i++;
-	str =  malloc(sizeof(char) * (i + 1));
+		i++;
+	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (NULL);
 	while (x < i)
@@ -68,22 +76,19 @@ static char	*get_line(char *line)
 	return (str);
 }
 
-
-
 static char	*search_line(int fd)
 {
-	char	*buffer;
-	char	*line;
+	char		*buffer;
+	char		*line;
 	static char	*rest;
-	int		end;
+	int			end;
 
 	end = 1;
 	buffer = malloc(sizeof(char) * (1 + BUFFER_SIZE));
-	if(!buffer)
-		return(NULL);
+	if (!buffer)
+		return (NULL);
 	while (end > 0 && (!rest || !ft_strchr(rest, '\n')))
 	{
-
 		end = read(fd, buffer, BUFFER_SIZE);
 		if (end == -1)
 		{
@@ -104,23 +109,4 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	return (search_line(fd));
-}
-
-int main()
-{
-	int fd = open("blabla", O_RDONLY);
-	char *s;
-
-	s = get_next_line(fd);
-	while(s)
-	{
-		printf("%s", s);
-		free(s);
-		s = get_next_line(fd);
-
-	}
-		printf("%s", s);
-		free(s);
-
-	return 0;
 }
