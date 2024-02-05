@@ -6,7 +6,7 @@
 /*   By: bkwamme <bkwamme@student.42.rio>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 12:05:24 by bkwamme           #+#    #+#             */
-/*   Updated: 2024/02/05 10:06:39 by bkwamme          ###   ########.fr       */
+/*   Updated: 2024/02/05 10:26:52 by bkwamme          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,12 @@ static char	*put_rest(char *line, char *rest, int i)
 static char	*get_rest(char *line)
 {
 	int		i;
-	int		x;
 	int		length;
 	char	*rest;
 
 	if (!line)
 		return (0);
 	length = ft_strlen(line);
-	x = 0;
 	i = 0;
 	while (line[i] != '\0' && line[i] != '\n')
 		i++;
