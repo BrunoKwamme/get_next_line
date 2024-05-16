@@ -1,6 +1,6 @@
 ## get_next_line
 
-#### A 42 project that will greatly improve your knowledge of "memory leaks" and fixing and manipulating static variables.
+#### A 42 project that will greatly improve your  "memory leaks" knowledge and fixing and manipulation of static variables.
 
 #### The project consists of a function that receives a text file and the output is a line from this text file.
 
